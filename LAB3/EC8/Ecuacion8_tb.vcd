@@ -1,0 +1,148 @@
+$date
+	Sun Aug 02 12:46:11 2020
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module Ecuacion8 $end
+$var wire 1 ! Y $end
+$var wire 1 " sal1 $end
+$var wire 1 # sal10 $end
+$var wire 1 $ sal11 $end
+$var wire 1 % sal12 $end
+$var wire 1 & sal13 $end
+$var wire 1 ' sal2 $end
+$var wire 1 ( sal3 $end
+$var wire 1 ) sal4 $end
+$var wire 1 * sal5 $end
+$var wire 1 + sal6 $end
+$var wire 1 , sal7 $end
+$var wire 1 - sal8 $end
+$var wire 1 . sal9 $end
+$var reg 1 / A $end
+$var reg 1 0 B $end
+$var reg 1 1 C $end
+$var reg 1 2 D $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+02
+01
+00
+0/
+1.
+1-
+1,
+1+
+1*
+1)
+1(
+1'
+1&
+1%
+1$
+1#
+1"
+1!
+$end
+#1
+0!
+0*
+0)
+12
+#2
+1!
+1)
+1*
+0(
+02
+11
+#3
+0)
+12
+#4
+0!
+1)
+1,
+0+
+1(
+0'
+02
+01
+10
+#5
+0,
+1+
+0)
+12
+#6
+1!
+1)
+1,
+0(
+02
+11
+#7
+0)
+12
+#8
+1!
+1)
+1(
+1.
+1-
+1'
+0"
+02
+01
+00
+1/
+#9
+0!
+0-
+0)
+12
+#10
+1!
+1)
+1-
+0(
+02
+11
+#11
+0!
+0.
+0)
+12
+#12
+1)
+1$
+0#
+1(
+1.
+0'
+02
+01
+10
+#13
+0$
+1#
+0)
+12
+#14
+0%
+1)
+1$
+0(
+02
+11
+#15
+0&
+1%
+0)
+12
+#16

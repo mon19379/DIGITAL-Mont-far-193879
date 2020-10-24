@@ -1,0 +1,135 @@
+$date
+	Sun Aug 02 12:47:11 2020
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module Ecuacion7 $end
+$var wire 1 ! Y $end
+$var wire 1 " sal1 $end
+$var wire 1 # sal10 $end
+$var wire 1 $ sal11 $end
+$var wire 1 % sal2 $end
+$var wire 1 & sal3 $end
+$var wire 1 ' sal4 $end
+$var wire 1 ( sal5 $end
+$var wire 1 ) sal6 $end
+$var wire 1 * sal7 $end
+$var wire 1 + sal8 $end
+$var wire 1 , sal9 $end
+$var reg 1 - A $end
+$var reg 1 . B $end
+$var reg 1 / C $end
+$var reg 1 0 D $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+00
+0/
+0.
+0-
+0,
+0+
+0*
+0)
+1(
+1'
+1&
+1%
+0$
+0#
+1"
+1!
+$end
+#1
+0!
+0(
+0'
+10
+#2
+1!
+1)
+1'
+0&
+00
+1/
+#3
+0)
+1*
+0'
+10
+#4
+0!
+1'
+0*
+1&
+0%
+00
+0/
+1.
+#5
+0'
+10
+#6
+1!
+1+
+1'
+0&
+00
+1/
+#7
+0+
+1,
+0'
+10
+#8
+1#
+1'
+1&
+0,
+1%
+0"
+00
+0/
+0.
+1-
+#9
+0!
+0#
+0'
+10
+#10
+1!
+1$
+1'
+0&
+00
+1/
+#11
+0!
+0$
+0'
+10
+#12
+1'
+1&
+0%
+00
+0/
+1.
+#13
+0'
+10
+#14
+1'
+0&
+00
+1/
+#15
+0'
+10
+#16
