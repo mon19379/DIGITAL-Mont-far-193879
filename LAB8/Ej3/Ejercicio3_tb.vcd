@@ -1,0 +1,100 @@
+$date
+	Sat Oct 24 17:33:15 2020
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module testbench $end
+$var wire 4 ! Out [3:0] $end
+$var reg 4 " A [3:0] $end
+$var reg 4 # B [3:0] $end
+$var reg 3 $ Selector [2:0] $end
+$scope module u1 $end
+$var wire 4 % A [3:0] $end
+$var wire 4 & B [3:0] $end
+$var wire 3 ' Selector [2:0] $end
+$var reg 4 ( Out [3:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx (
+bx '
+bx &
+bx %
+bx $
+bx #
+bx "
+bx !
+$end
+#1
+b0 !
+b0 (
+b0 $
+b0 '
+b0 #
+b0 &
+b0 "
+b0 %
+#2
+b100 #
+b100 &
+b11 "
+b11 %
+#3
+b1010 !
+b1010 (
+b1 $
+b1 '
+b1000 #
+b1000 &
+b10 "
+b10 %
+#4
+b101 !
+b101 (
+b10 $
+b10 '
+b10 #
+b10 &
+b11 "
+b11 %
+#5
+b100 !
+b100 (
+b100 $
+b100 '
+b1010 #
+b1010 &
+b110 "
+b110 %
+#6
+b111 !
+b111 (
+b101 $
+b101 '
+b1100 #
+b1100 &
+#7
+b1 !
+b1 (
+b110 $
+b110 '
+b1001 #
+b1001 &
+b1010 "
+b1010 %
+#8
+b0 !
+b0 (
+b111 $
+b111 '
+b110 #
+b110 &
+b1110 "
+b1110 %
+#145
