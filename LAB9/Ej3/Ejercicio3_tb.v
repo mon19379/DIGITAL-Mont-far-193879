@@ -15,7 +15,7 @@ FlipFJK a1(clk, reset, EN, J, K, Q);
 
 initial begin
 
-$display(" ejercicio 1");
+$display(" ejercicio 3");
 $display ("clk RST EN  J K | Q ");
 $display("----------------------------|------------");
 $monitor("%b %b %b %b %b  | %b", clk, reset, EN,J, K, Q);
