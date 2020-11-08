@@ -18,7 +18,7 @@ endmodule
 
 //Contador de 12 bits
 
-module cont(input wire clk, EN, reset, LDEN, input wire [11:0]LD, output reg[11:0]Q);
+module cont(input wire clk, reset, EN, LDEN, input wire [11:0]LD, output reg[11:0]Q);
 
 always@(posedge clk or posedge reset or posedge LDEN)begin
 
@@ -56,17 +56,18 @@ module FlipF8(input wire clk, reset, EN,
               output wire[3:0]Q1);
 
 
-FlipF a1(clk, reset, EN, [7:4]D, [3:0]Q);
-FlipF a2(clk, reset, EN, [3:0]D, [3:0]Q);
+FlipF a1(clk, reset, EN, D[7:4], Q[3:0]);
+FlipF a2(clk, reset, EN, D[3:0], Q1[3:0]);
 
 endmodule
 
-module union(clk, reset, EN1, ldbit, input wire[11:0]load, EN2, output wire[3:0]Y, Y1);
+//se unen los módulos
+module todo(input wire clk, reset, EN1, ldbit, input wire [11:0]load, input wire EN2, output wire [3:0]Y, output wire [3:0]Y1);
 wire [11:0]A;
-wire [8:0]B;
+wire [7:0]B;
 
 cont   f1 (clk, reset, EN1, ldbit, load, A);
 memrom f2 (A,B);
 FlipF8 f3 (clk, reset, EN2, B, Y, Y1);
 
-endmodule 
+endmodule
