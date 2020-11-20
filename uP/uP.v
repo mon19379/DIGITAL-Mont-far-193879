@@ -17,8 +17,8 @@ endmodule
 //Flip Flop 2 bits
 module FlipF2 (input wire clk, reset, EN, input wire [1:0]D, output wire [1:0]Q);
 
-  FlipF a1(clk, reset, EN, D[0], Q[0]);
-  FlipF a2(clk, reset, EN, D[1], Q[1]);
+  FlipF1 a1(clk, reset, EN, D[0], Q[0]);
+  FlipF1 a2(clk, reset, EN, D[1], Q[1]);
 
 endmodule
 
@@ -165,8 +165,8 @@ module ALU(input wire[3:0]W,
   endmodule
 
 //RAM
-module RAM(input wire chips, oute, wrte, input wire [11:0]adr, inout [3:0]data);
-  reg[3:0] R[0:4095];
+module RAM(input wire chips, wrte, input wire [11:0]adr, inout [3:0]data);
+  reg[3:0] mem[0:4095];
   reg[3:0] out;
 
   assign data = (chips && !wrte)? out: 8'bz; //buffer tri estado
@@ -221,7 +221,7 @@ endmodule
 
 
 module uP(input wire clock, reset,
-          input wire [3:0]pushbuttons
+          input wire [3:0]pushbuttons,
           output wire phase, c_flag, z_flag,
           output wire [3:0]instr,
           output wire [3:0]oprnd,
@@ -232,10 +232,29 @@ module uP(input wire clock, reset,
           output wire [11:0]PC,
           output wire [11:0]address_RAM);
 
-          wire [11:0] microCode_O;
-          wire [3:0] ALU_O;
+          wire [12:0] decode_O;
+          wire [3:0] ALU_Out;
           wire Zero;
           wire Carry;
-          wire [6:0] microCode_I;
+          wire [6:0] decode_I;
           assign address_RAM = {oprnd, program_byte};
-          assign microCode_I = {Zero, Carry, phase, instr};
+          assign decode_I = {c_flag, Z_flag, phase, instr};
+
+
+
+          cont  conta   (clock, reset, decode_O[12], decode_O[11], address_RAM, PC);
+          memrom rom    (PC, program_byte);
+          FlipF8 fetch  (clock, reset, ~phase, program_byte, instr, oprnd);
+          FlipFT pha    (clock, reset, 1'b1, phase);
+          FlipF2 flags  (clock, reset, decode_O[9], {Carry, Zero}, {C_flag, Z_flag});
+          ROM    deco   (decode_I, decode_O);
+          accu   acumul (clock, reset, decode_O[10], ALU_Out, accu);
+          ALU    alu    (accu, data_bus, {decode_O[8], decode_O[7], decode_O[6]}, Carry, Zero, ALU_Out);
+          RAM    ram    (decode_O[5], decode_O[4], address_RAM, data_bus);
+          BUFFTRI in    (decode_O[2], pushbuttons, data_bus);
+          BUFFTRI aluo  (decode_O[3], ALU_Out, data_bus);
+          BUFFTRI fetcho(decode_O[1], oprnd, data_bus);
+          FlipF4  sal   (clock, reset, decode_O[0], data_bus, FF_out);
+
+
+endmodule
