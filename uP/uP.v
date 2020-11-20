@@ -104,65 +104,28 @@ module accu(input wire clk, reset, EN, input wire [3:0]D, output wire [3:0]Q);
   endmodule
 
 //ALU
-module ALU(input wire[3:0]W,
-             input wire [3:0]B,
-             input wire [2:0]S,
-             output reg C, Z,
-             output reg [3:0]O);
+module ALU(input [3:0] A, B,
+           input [2:0] F,
+           output C, Z,
+           output [3:0] S);
 
-  reg[4:0]A;
+    reg [4:0] ope;
 
-  always @(W, B, S)
-  begin
+    always @ (A, B, F)
+        case (F)
+            3'b000: ope = A;
+            3'b001: ope = A - B;
+            3'b010: ope = B;
+            3'b011: ope = A + B;
+            3'b100: ope = {1'b0, ~(A & B)};
+            default: ope = 5'b10101;
+        endcase
 
-  case (S)
+    assign S = ope[3:0];
+    assign C = ope[4];
+    assign Z = ~(ope[3] | ope[2] | ope[1] | ope[0]);
 
-
-  3'b000:
-        begin
-        A = 5'b00000;
-        A = W;
-        C = 0;
-        Z = 0;
-        O = A[3:0];
-
-  end
-
-  3'b010:
-          begin
-          A = 5'b00000;
-          A = B;
-          C = 0;
-          Z = 0;
-          O = A[3:0];
-    end
-    3'b100:
-          begin
-          A = 5'b00000;
-          A = ~(W&B);
-          C = 0;
-          Z = 0;
-          O = A[3:0];
-    end
-    3'b001:
-          begin
-          A = 5'b00000;
-          A = W-B;
-          C = A[4];
-          Z = (A==5'b00000);
-          O = A[3:0];
-    end
-    3'b011:
-          begin
-          A = 5'b00000;
-          A = W+B;
-          C = A[4];
-          Z = (A==5'b00000);
-          O = A[3:0];
-    end
-    endcase // Sel
-  end
-  endmodule
+endmodule
 
 //RAM
 module RAM(input wire chips, wrte, input wire [11:0]adr, inout [3:0]data);
