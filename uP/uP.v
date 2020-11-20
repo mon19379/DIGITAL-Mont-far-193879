@@ -238,7 +238,7 @@ module uP(input wire clock, reset,
           wire Carry;
           wire [6:0] decode_I;
           assign address_RAM = {oprnd, program_byte};
-          assign decode_I = {c_flag, z_flag, phase, instr};
+          assign decode_I = {instr, c_flag, z_flag, phase};
 
 
 
