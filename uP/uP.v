@@ -238,7 +238,7 @@ module uP(input wire clock, reset,
           wire Carry;
           wire [6:0] decode_I;
           assign address_RAM = {oprnd, program_byte};
-          assign decode_I = {c_flag, Z_flag, phase, instr};
+          assign decode_I = {c_flag, z_flag, phase, instr};
 
 
 
@@ -246,7 +246,7 @@ module uP(input wire clock, reset,
           memrom rom    (PC, program_byte);
           FlipF8 fetch  (clock, reset, ~phase, program_byte, instr, oprnd);
           FlipFT pha    (clock, reset, 1'b1, phase);
-          FlipF2 flags  (clock, reset, decode_O[9], {Carry, Zero}, {C_flag, Z_flag});
+          FlipF2 flags  (clock, reset, decode_O[9], {Carry, Zero}, {c_flag, z_flag});
           ROM    deco   (decode_I, decode_O);
           accu   acumul (clock, reset, decode_O[10], ALU_Out, accu);
           ALU    alu    (accu, data_bus, {decode_O[8], decode_O[7], decode_O[6]}, Carry, Zero, ALU_Out);
