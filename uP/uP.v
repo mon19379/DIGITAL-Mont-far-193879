@@ -43,17 +43,23 @@ module cont(input wire clk, reset, EN, LDEN,
             input wire [11:0]LD,
             output reg[11:0]Q);
 
-            always@(posedge clk or posedge reset or posedge LDEN)begin
+            always@(posedge clk or posedge reset)begin
 
-            if(reset)
-            Q <= 12'b000000000000; //si se activa el reset, todos los bits en 0
 
-            else if (LDEN)
+            if (LDEN) begin
             Q <= LD;                //si se activa el load, se precarga un valor
 
-            else if (EN)  //si se activa el enabled cuenta
+            end
+
+            else if (EN) begin //si se activa el enabled cuenta
             Q <= Q + 12'b1;
             end
+
+            else if(reset)begin
+            Q <= 12'b000000000000; //si se activa el reset, todos los bits en 0
+            end
+
+      end
 
 endmodule
 
@@ -106,7 +112,7 @@ module accu(input wire clk, reset, EN, input wire [3:0]D, output wire [3:0]Q);
 //ALU
 module ALU(input [3:0] A, B,
            input [2:0] F,
-           output C, Z,
+           output C, Ze,
            output [3:0] S);
 
     reg [4:0] ope;
@@ -123,16 +129,17 @@ module ALU(input [3:0] A, B,
 
     assign S = ope[3:0];
     assign C = ope[4];
-    assign Z = ~(ope[3] | ope[2] | ope[1] | ope[0]);
+    assign Ze = ~(ope[3] | ope[2] | ope[1] | ope[0]);
 
 endmodule
 
 //RAM
 module RAM(input wire chips, wrte, input wire [11:0]adr, inout [3:0]data);
-  reg[3:0] mem[0:4095];
   reg[3:0] out;
+  reg[3:0] mem[0:4095];
 
-  assign data = (chips && !wrte)? out: 8'bz; //buffer tri estado
+
+  assign data = (chips && ! wrte)? out: 8'bz; //buffer tri estado
 
   always @ (adr or data or chips or wrte)
   begin: MEM_write
@@ -143,14 +150,14 @@ module RAM(input wire chips, wrte, input wire [11:0]adr, inout [3:0]data);
 
   always @ (adr or chips or wrte)
   begin : MEM_rd
-    if (chips && !wrte) begin
+    if (chips && ! wrte) begin
       out = mem[adr];
       end
     end
 endmodule
 
 //microcode
-module ROM(input wire [6:0]A, output reg[12:0]Y);
+module microC(input wire [6:0]A, output reg[12:0]Y);
   always @(*) begin
 
     casex(A)
@@ -210,7 +217,7 @@ module uP(input wire clock, reset,
           FlipF8 fetch  (clock, reset, ~phase, program_byte, instr, oprnd);
           FlipFT pha    (clock, reset, 1'b1, phase);
           FlipF2 flags  (clock, reset, decode_O[9], {Carry, Zero}, {c_flag, z_flag});
-          ROM    deco   (decode_I, decode_O);
+          microC   deco   (decode_I, decode_O);
           accu   acumul (clock, reset, decode_O[10], ALU_Out, accu);
           ALU    alu    (accu, data_bus, {decode_O[8], decode_O[7], decode_O[6]}, Carry, Zero, ALU_Out);
           RAM    ram    (decode_O[5], decode_O[4], address_RAM, data_bus);
