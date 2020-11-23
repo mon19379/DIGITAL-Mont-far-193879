@@ -2,38 +2,38 @@
 ///Flip Flop 1 bit
 module FlipF1(input wire clk, reset, EN,
             input wire D,
-            output reg Q); // se indican entrads y salidas
-            always @ (posedge clk or posedge reset)begin  //se usa un bloque always para que se ejecute siempre
+            output reg Q);
+            always @ (posedge clk or posedge reset)begin
               if (reset) begin
-              Q <= 1'b0;         // se establece que si reset esta activo, la salida es cero
+              Q <= 1'b0;
               end
               else if (EN) begin
                 Q <= D;
                   end
-                    end       //se establece que si enabled esta activo, el valor de la salida es igual al de la entrada
+                    end
 
 endmodule
 
 //Flip Flop 2 bits
-module FlipF2 (input wire clk, reset, EN, input wire [1:0]D, output wire [1:0]Q); // se indican entradas y salidas
+module FlipF2 (input wire clk, reset, EN, input wire [1:0]D, output wire [1:0]Q);
 
   FlipF1 a1(clk, reset, EN, D[0], Q[0]);
-  FlipF1 a2(clk, reset, EN, D[1], Q[1]); //se llama dos veces el FF de un bit y se asigna con sus respectivos bits
+  FlipF1 a2(clk, reset, EN, D[1], Q[1]);
 
 endmodule
 
 //Flip Flop 4 bits
 module FlipF4(input wire clk, reset, EN,
             input wire [3:0]D,
-            output reg [3:0]Q); //se indican entradas y salidas
+            output reg [3:0]Q);
 
-            always @ (posedge clk or posedge reset)begin  //se usa un bloque always para que se ejecute siempre
+            always @ (posedge clk or posedge reset)begin
              if (reset) begin
-              Q <= 4'b0000;              // se establece que si reset esta activo, la salida es cero
+              Q <= 4'b0000;
               end
               else if (EN) begin
               Q <= D;
-              end                       //se establece que si enabled esta activo, el valor de la salida es igual al de la entrada
+              end
             end
 
 endmodule
@@ -41,9 +41,9 @@ endmodule
 //Contador de 12 bits
 module cont(input wire clk, reset, EN, LDEN,
             input wire [11:0]LD,
-            output reg[11:0]Q);  //se indican entradas y salidas del contador
+            output reg[11:0]Q);
 
-            always@(posedge clk or posedge reset)begin    //se usa un bloque always para que se ejecute siempre
+            always@(posedge clk or posedge reset)begin
 
 
             if (LDEN) begin
@@ -71,7 +71,7 @@ module  memrom(input wire [11:0]D,
                reg [7:0]   larom[0:4095]; //se declara el width y el depth de la memoria
 
                initial begin
-               $readmemh("memory.list1", larom); // se establece que se lea en hexadecimal lo del archivo (lo que entra) y salida
+               $readmemh("memory.list", larom); // se establece que se lea en hexadecimal lo del archivo (lo que entra) y salida
                end
 
 endmodule
@@ -80,32 +80,32 @@ endmodule
 module FlipF8(input wire clk, reset, EN,
               input wire[7:0]D,
               output wire[3:0]Q,
-              output wire[3:0]Q1);  //se indican ls entradas y salidas
+              output wire[3:0]Q1);
 
 
               FlipF4 a1(clk, reset, EN, D[7:4], Q[3:0]);
-              FlipF4 a2(clk, reset, EN, D[3:0], Q1[3:0]);  //se llama dos veces al FF de 2 bits y se asignan los respectivos bits
+              FlipF4 a2(clk, reset, EN, D[3:0], Q1[3:0]);
 
 endmodule
 
 //FF tipo T -phase
 module FlipFT(input wire clk, reset, EN,
-              output wire Q1);  //se indican entradas y salidas
+              output wire Q1);
     wire D;
-    not (D, Q1);  //se niegan d y Q
-    FlipF1  a1(clk, reset, EN, D, Q1); //se llama al FF de un bit
+    not (D, Q1);
+    FlipF1  a1(clk, reset, EN, D, Q1);
 endmodule
 
 //Buffer tri estado
 module BUFFTRI(input wire EN, input wire [3:0]A, output wire [3:0]out);
-  assign out = EN ? A:4'bz;   //se establece que cuando se enciende en enable el valor de la salida es igual a la entrada, de lo contrario es alta impedancia
+  assign out = EN ? A:4'bz;
   endmodule
 
 //accu
-module accu(input wire clk, reset, EN, input wire [3:0]D, output wire [3:0]Q); // se indican entradas y salidas
+module accu(input wire clk, reset, EN, input wire [3:0]D, output wire [3:0]Q);
 
   FlipF2 a3(clk, reset, EN, D[1:0], Q[1:0]);
-  FlipF2 a4(clk, reset, EN, D[3:2], Q[3:2]);   //se llama dos veces al FF de dos bits y se asignan sus respectivos bits
+  FlipF2 a4(clk, reset, EN, D[3:2], Q[3:2]);
 
   endmodule
 
@@ -113,54 +113,54 @@ module accu(input wire clk, reset, EN, input wire [3:0]D, output wire [3:0]Q); /
 module ALU(input [3:0] A, B,
            input [2:0] F,
            output C, Ze,
-           output [3:0] S); //se indican las entradas y salidas
+           output [3:0] S);
 
     reg [4:0] ope;
 
-    always @ (A, B, F)  //se usa un bloque always para que se ejecute siempre
-        case (F)        //se implementa un case o lookup table para asignar una operacion a un valor especifico
-            3'b000: ope = A;  //deja pasar el valor de A si el selector es 000
-            3'b001: ope = A - B; // se ejecuta una resta si el selector es 001
-            3'b010: ope = B;  //deja pasar el valor de B si el selector es 010
-            3'b011: ope = A + B; //se ejecuta una suma si el selector es 011
-            3'b100: ope = {1'b0, ~(A & B)}; // se concatenan dos bits, el primero siempre es 1 y el segundo es el negado del AND de A y B
-            default: ope = 5'b10101;  // se establece un valor predeterminado
+    always @ (A, B, F)
+        case (F)
+            3'b000: ope = A;
+            3'b001: ope = A - B;
+            3'b010: ope = B;
+            3'b011: ope = A + B;
+            3'b100: ope = {1'b0, ~(A & B)};
+            default: ope = 5'b10101;
         endcase
 
     assign S = ope[3:0];
     assign C = ope[4];
-    assign Ze = ~(ope[3] | ope[2] | ope[1] | ope[0]);  //se establecen las respectivas funciones de los selectores y las banderas
+    assign Ze = ~(ope[3] | ope[2] | ope[1] | ope[0]);
 
 endmodule
 
 //RAM
-module RAM(input wire chips, wrte, input wire [11:0]adr, inout [3:0]data); // se establecen entradas  y salidas
+module RAM(input wire chips, wrte, input wire [11:0]adr, inout [3:0]data);
   reg[3:0] out;
   reg[3:0] mem[0:4095];
 
 
   assign data = (chips && ! wrte)? out: 8'bz; //buffer tri estado
 
-  always @ (adr or data or chips or wrte) //se usa un bloque always para que se ejecute siempre
+  always @ (adr or data or chips or wrte)
   begin: MEM_write
     if (chips && wrte) begin
-      mem[adr] = data;    //si el chip select y el write enabled estan activos, la info guardada se direcciona a donde se indica
+      mem[adr] = data;
     end
   end
 
   always @ (adr or chips or wrte)
   begin : MEM_rd
     if (chips && ! wrte) begin
-      out = mem[adr]; //se lee la memoria depende a la combinacion de los enable
+      out = mem[adr];
       end
     end
 endmodule
 
 //microcode
-module microC(input wire [6:0]A, output reg[12:0]Y); //se indican entradas y salidas
-  always @(*) begin //se usa un bloque always para que se ejecute siempre
+module microC(input wire [6:0]A, output reg[12:0]Y);
+  always @(*) begin
 
-    casex(A)  //se implementa un case o lookup table para que se ejecuten ciertos comandos segun el direccionamiento
+    casex(A)
 
       7'bxxxxxx0: Y = 13'b1000000001000;
       7'b00001x1: Y = 13'b0100000001000;
@@ -200,7 +200,7 @@ module uP(input wire clock, reset,
           output wire [3:0]accu,
           output wire [7:0]program_byte,
           output wire [11:0]PC,
-          output wire [11:0]address_RAM);   //se indican entradas y salidas
+          output wire [11:0]address_RAM);
 
           wire [12:0] decode_O;
           wire [3:0] ALU_Out;
@@ -208,7 +208,7 @@ module uP(input wire clock, reset,
           wire Carry;
           wire [6:0] decode_I;
           assign address_RAM = {oprnd, program_byte};
-          assign decode_I = {instr, c_flag, z_flag, phase};  //se concatenan ciertas variables
+          assign decode_I = {instr, c_flag, z_flag, phase};
 
 
 
@@ -224,7 +224,7 @@ module uP(input wire clock, reset,
           BUFFTRI in    (decode_O[2], pushbuttons, data_bus);
           BUFFTRI aluo  (decode_O[3], ALU_Out, data_bus);
           BUFFTRI fetcho(decode_O[1], oprnd, data_bus);
-          FlipF4  sal   (clock, reset, decode_O[0], data_bus, FF_out);  //se hacen las conexiones de todo el uP 
+          FlipF4  sal   (clock, reset, decode_O[0], data_bus, FF_out);
 
 
 endmodule
